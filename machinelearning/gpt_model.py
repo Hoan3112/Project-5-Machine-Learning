@@ -35,6 +35,16 @@ class Transformer_Block(nn.Module):
 
     def forward(self, x):
         """YOUR CODE HERE"""
+        # Attention + residual, then layer norm
+        attn_out = self.attn_block(x)
+        x = x + attn_out
+        x = self.norm_1(x)
+        # Feed-forward (single linear + ReLU), residual, then final norm
+        ff = self.linear_1(x)
+        ff = F.relu(ff)
+        x = x + ff
+        x = self.norm_2(x)
+        return x
 
        
 
@@ -69,6 +79,20 @@ class Character_GPT(nn.Module):
         assert t <= self.block_size, f"Cannot forward sequence of length {t}, block size is only {self.block_size}"
 
         """YOUR CODE HERE"""
+        b, t = input.size()
+        assert t <= self.block_size, f"Cannot forward sequence of length {t}, block size is only {self.block_size}"
+
+        # token embedding
+        x = self.embed(input)  # (b, t, n_embd)
+
+        # transformer blocks
+        for block in self.transformer_blocks:
+            x = block(x)
+
+        # final normalization and output projection (no activation)
+        x = self.norm(x)
+        logits = self.output_layer(x)  # (b, t, vocab_size)
+        return logits
 
 
     @torch.no_grad()
