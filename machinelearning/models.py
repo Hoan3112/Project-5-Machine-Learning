@@ -31,10 +31,9 @@ class PerceptronModel(Module):
         Parameter(weight_vector)
 
         where weight_vector is a pytorch Tensor of dimension 'dimensions'
-
         
-        Hint: You can use ones(dim) to create a tensor of dimension dim.
-        """
+        Hint   : You can use ones(dim) to create a tensor of dimension dim.
+        """    
         super(PerceptronModel, self).__init__()
         
         "*** YOUR CODE HERE ***"
@@ -67,7 +66,7 @@ class PerceptronModel(Module):
         """
         "*** YOUR CODE HERE ***"
         score = self.run(x)
-        if score.item() >= 0:
+        if score.item() >= 0: 
             return 1
         else:
             return -1
@@ -100,7 +99,6 @@ class PerceptronModel(Module):
                         self.w.data += x * actual
                         all_correct = False
                 
-                # If we made a complete pass without any mistakes, we're done
                 if all_correct:
                     break
 
@@ -127,7 +125,6 @@ class RegressionModel(Module):
         
         # Learning rate
         self.learning_rate = 0.01
-
 
     def forward(self, x):
         """
@@ -607,7 +604,7 @@ class DigitConvolutionalModel(Module):
         dataloader = DataLoader(dataset, batch_size=32, shuffle=True)
         optimizer = optim.Adam(self.parameters(), lr=0.001)
 
-        for epoch in range(20):
+        for epoch in range(12):
             total_loss = 0.0
 
             for sample in dataloader:
